@@ -148,10 +148,10 @@ def one_energy(arr,ix,iy,nmax):
     ixm = (ix-1)%nmax # of the neighbours
     iyp = (iy+1)%nmax # with wraparound
     iym = (iy-1)%nmax #
-#
+
 # Add together the 4 neighbour contributions
 # to the energy
-#
+
     ang = arr[ix,iy]-arr[ixp,iy]
     en += 0.5*(1.0 - 3.0*np.cos(ang)**2)
     ang = arr[ix,iy]-arr[ixm,iy]
@@ -253,7 +253,9 @@ def MC_step(arr,Ts,nmax):
                 else:
                     arr[ix,iy] -= ang
     return accept/(nmax*nmax)
+
 #=======================================================================
+
 def main(program, nsteps, nmax, temp, pflag):
     """
     Arguments:
