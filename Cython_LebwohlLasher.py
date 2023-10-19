@@ -28,7 +28,7 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from cython.CythonLebwohlLasher import one_energy, all_energy, savedat, initdat, get_order, plotdat, MC_step
+from Cython.CythonLebwohlLasher import one_energy, all_energy, savedat, initdat, get_order, plotdat, MC_step
 
 # #=======================================================================
 # def initdat(nmax):
