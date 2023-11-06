@@ -28,9 +28,8 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from numba import guvectorize, float64, vectorize, int64, jit
+from numba import guvectorize, float64, vectorize, int64, jit, njit
 import numba as nb 
-import scipy
 
 #=======================================================================
 ## Initdat is vectorized 
@@ -134,7 +133,9 @@ def savedat(arr,nsteps,Ts,runtime,ratio,energy,order,nmax):
 #=======================================================================
 #@jit(nopython=True, parallel=True)
 #@vectorize(['float64(float64[:,:], int64, int64, int64)'], target='parallel')
-def one_energy(arr: np.ndarray,ix,iy,nmax):
+#@guvectorize([(float64[:,:], int64, int64, int64, float64[:])], '(n,m),(),(),(),(k)->(k)', target='cpu')
+@njit(fastmath=True)
+def one_energy(arr,ix,iy,nmax):
     """
     Arguments:
 	  arr (float(nmax,nmax)) = array that contains lattice data;
@@ -149,7 +150,7 @@ def one_energy(arr: np.ndarray,ix,iy,nmax):
 	Returns:
 	  en (float) = reduced energy of cell.
     """
-    en = 0.0
+    res = 0.0
     ixp = (ix+1)%nmax # These are the coordinates
     ixm = (ix-1)%nmax # of the neighbours
     iyp = (iy+1)%nmax # with wraparound
@@ -159,18 +160,21 @@ def one_energy(arr: np.ndarray,ix,iy,nmax):
 # to the energy
 #
     ang = arr[ix,iy]-arr[ixp,iy]
-    en += 0.5*(1.0 - 3.0*np.cos(ang)**2)
+    res += 0.5*(1.0 - 3.0*np.cos(ang)**2)
     ang = arr[ix,iy]-arr[ixm,iy]
-    en += 0.5*(1.0 - 3.0*np.cos(ang)**2)
+    res += 0.5*(1.0 - 3.0*np.cos(ang)**2)
     ang = arr[ix,iy]-arr[ix,iyp]
-    en += 0.5*(1.0 - 3.0*np.cos(ang)**2)
+    res += 0.5*(1.0 - 3.0*np.cos(ang)**2)
     ang = arr[ix,iy]-arr[ix,iym]
-    en += 0.5*(1.0 - 3.0*np.cos(ang)**2)
-    return en
+    res += 0.5*(1.0 - 3.0*np.cos(ang)**2)
+
+    return res
+
 #=======================================================================
 #vectorize using numba
 #@vectorize(['float64(float64[:,:], int64)'], target='parallel')
-def all_energy(arr,nmax):
+@guvectorize([(float64[:,:], int64, float64[:,:])], '(n,m),()->(n,m)', target='parallel')
+def all_energy(arr,nmax, result):
     """
     Arguments:
 	  arr (float(nmax,nmax)) = array that contains lattice data;
@@ -181,12 +185,11 @@ def all_energy(arr,nmax):
 	Returns:
 	  enall (float) = reduced energy of lattice.
     """
-    print(arr)
-    enall = 0.0
+    #print(arr)
     for i in range(nmax):
         for j in range(nmax):
-            enall += one_energy(arr,i,j,nmax)
-    return enall
+            result_energy = one_energy(arr,i,j,nmax)
+            result[0][0] += result_energy
 
 #=============================================================================
 #@guvectorize([(float64[:,:], float64[:])],"(n,n),() -> (n)")
@@ -209,33 +212,16 @@ def get_order(arr,nmax):
     # Generate a 3D unit vector for each cell (i,j) and
     # put it in a (3,i,j) array.
     #
-    lab = np.vstack((np.cos(arr),np.sin(arr),np.zeros_like(arr))).reshape(3,nmax[0],nmax[0])
+    lab = np.vstack((np.cos(arr),np.sin(arr),np.zeros_like(arr))).reshape(3,nmax,nmax)
     for a in range(3):
         for b in range(3):
-            for i in range(nmax[0]):
-                for j in range(nmax[0]):
+            for i in range(nmax):
+                for j in range(nmax):
                     Qab[a,b] += 3*lab[a,i,j]*lab[b,i,j] - delta[a,b]
-    Qab = Qab/(2*nmax[0]*nmax[0])
+    Qab = Qab/(2*nmax*nmax)
     eigenvalues,eigenvectors = np.linalg.eig(Qab)
     return eigenvalues.max()
 #=======================================================================
-def get_order_base(arr: np.ndarray,nmax):
-    Qab = np.zeros((3,3))
-    delta = np.eye(3,3)
-    lab = np.vstack((np.cos(arr),np.sin(arr),np.zeros_like(arr))).reshape(3,nmax[0],nmax[0])
-def get_order_vec(arr,nmax):
-    """
-    Arguments:
-	  arr (float(nmax,nmax)) = array that contains lattice data;
-      nmax (int) = side length of square lattice.
-    Description:
-      Function to calculate the order parameter of a lattice
-      using the Q tensor approach, as in equation (3) of the
-      project notes.  Function returns S_lattice = max(eigenvalues(Q_ab)).
-	Returns:
-	  max(eigenvalues(Qab)) (float) = order parameter for lattice.
-    """
-    
 #=======================================================================
 def MC_step(arr,Ts,nmax):
     """
@@ -268,9 +254,12 @@ def MC_step(arr,Ts,nmax):
             ix = xran[i,j]
             iy = yran[i,j]
             ang = aran[i,j]
-            en0 = one_energy(arr,ix,iy,nmax)
+            res=np.zeros(1,dtype=np.float64)
+            one_energy(arr,ix,iy,nmax)
+            en0 = res[0]
             arr[ix,iy] += ang
-            en1 = one_energy(arr,ix,iy,nmax)
+            one_energy(arr,ix,iy,nmax)
+            en1 = res[0]
             if en1<=en0:
                 accept += 1
             else:
@@ -298,16 +287,10 @@ def main(program, nsteps, nmax, temp, pflag):
       NULL
     """
 
-    # Vectorize functions to be used
-    #one_energy_vec = np.vectorize(one_energy)
-    #get_order_vec = np.vectorize(get_order)
-    #MC_step_vec = np.vectorize(MC_step)
-    all_energy_vec = np.vectorize(all_energy)
-    initdat_vec = np.vectorize(initdat)
-    #savedat_vec = np.vectorize(savedat)
-
     # Create and initialise lattice
-    lattice = initdat_vec(nmax)
+    lattice = initdat(nmax)
+    lattice_view = lattice #.reshape(nmax,1).copy()
+    result_view = np.zeros_like(lattice_view, dtype = float)
     # Plot initial frame of lattice
     plotdat(lattice,pflag,nmax)
     # Create arrays to store energy, acceptance ratio and order parameter
@@ -315,21 +298,24 @@ def main(program, nsteps, nmax, temp, pflag):
     ratio = np.zeros(nsteps+1,dtype=np.dtype)
     order = np.zeros(nsteps+1,dtype=np.dtype)
     # Set initial values in arrays
-    energy[0] = all_energy(lattice,nmax)
+    all_energy(lattice,nmax, result_view)
+    energy[0] = result_view[0][0]
     print("after setup")
     ratio[0] = 0.5 # ideal value
-    order[0] = get_order_vec(lattice,nmax)
+    order[0] = get_order(lattice,nmax)
 
     # Begin doing and timing some MC steps.
     initial = time.time()
     for it in range(1,nsteps+1):
         ratio[it] = MC_step(lattice,temp,nmax)
-        order[it] = get_order_vec(lattice,nmax)
-        energy[it] = all_energy(lattice,nmax)
+        order[it] = get_order(lattice,nmax)
+        all_energy(lattice_view,nmax,result_view)
+        energy[it] = result_view[0][0]
 
-    print(lattice)
+    #print(lattice)
     final = time.time()
     runtime = final-initial
+    print(energy)
     
     # Final outputs
     print("{}: Size: {:d}, Steps: {:d}, T*: {:5.3f}: Order: {:5.3f}, Time: {:8.6f} s".format(program, nmax,nsteps,temp,order[nsteps-1],runtime))

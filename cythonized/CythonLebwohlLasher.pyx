@@ -34,6 +34,8 @@ cimport numpy as np
 from cython.parallel cimport prange
 from libc.math cimport exp, cos, sin, sqrt, pi
 cimport libc.stdlib
+from libc.stdlib cimport rand, RAND_MAX
+cimport openmp
 
 #=======================================================================
 cdef np.ndarray initdat(int nmax):
@@ -210,7 +212,7 @@ cdef double get_order(double[:, ::1] arr,int nmax):
     return eigenvalues.max()
 
 #=======================================================================
-cdef MC_step(arr,Ts,nmax):
+cdef MC_step(np.ndarray arr,float Ts,int nmax):
     """
     Arguments:
 	  arr (float(nmax,nmax)) = array that contains lattice data;
@@ -252,11 +254,14 @@ cdef MC_step(arr,Ts,nmax):
             # exp( -(E_new - E_old) / T* ) >= rand(0,1)
                 boltz = exp( -(en1 - en0) / Ts )
 
-                if boltz >= np.random.uniform(0.0,1.0):
+                if boltz >= random_uniform():
                     accept += 1
                 else:
                     arr[ix,iy] -= ang
     return accept/(nmax*nmax)
+
+cdef double random_uniform() nogil:
+    return <double>rand() / RAND_MAX
 
 #=======================================================================
 cpdef main(str program, int nsteps, int nmax, float temp, int pflag):

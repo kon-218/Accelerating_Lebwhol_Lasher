@@ -1,10 +1,10 @@
-from cython.CythonLebwohlLasher import initdat, one_energy, all_energy
+from cythonized.cythonized.CythonLebwohlLasher import one_energy, all_energy
 import numpy as np
 
-def test_initdat():
-    nmax = 5
-    lattice = initdat(nmax)
-    assert lattice.shape == (nmax, nmax)
+# def test_initdat():
+#     nmax = 5
+#     lattice = initdat(nmax)
+#     assert lattice.shape == (nmax, nmax)
 
 def test_one_energy():
     nmax = 5

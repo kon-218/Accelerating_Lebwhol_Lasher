@@ -27,8 +27,8 @@ import sys
 import time
 import datetime
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+# import matplotlib.pyplot as plt
+# import matplotlib as mpl
 
 #=======================================================================
 def initdat(nmax):
@@ -45,52 +45,52 @@ def initdat(nmax):
     arr = np.random.random_sample((nmax,nmax))*2.0*np.pi
     return arr
 #=======================================================================
-def plotdat(arr,pflag,nmax):
-    """
-    Arguments:
-	  arr (float(nmax,nmax)) = array that contains lattice data;
-	  pflag (int) = parameter to control plotting;
-      nmax (int) = side length of square lattice.
-    Description:
-      Function to make a pretty plot of the data array.  Makes use of the
-      quiver plot style in matplotlib.  Use pflag to control style:
-        pflag = 0 for no plot (for scripted operation);
-        pflag = 1 for energy plot;
-        pflag = 2 for angles plot;
-        pflag = 3 for black plot.
-	  The angles plot uses a cyclic color map representing the range from
-	  0 to pi.  The energy plot is normalised to the energy range of the
-	  current frame.
-	Returns:
-      NULL
-    """
-    if pflag==0:
-        return
-    u = np.cos(arr)
-    v = np.sin(arr)
-    x = np.arange(nmax)
-    y = np.arange(nmax)
-    cols = np.zeros((nmax,nmax))
-    if pflag==1: # colour the arrows according to energy
-        mpl.rc('image', cmap='rainbow')
-        for i in range(nmax):
-            for j in range(nmax):
-                cols[i,j] = one_energy(arr,i,j,nmax)
-        norm = plt.Normalize(cols.min(), cols.max())
-    elif pflag==2: # colour the arrows according to angle
-        mpl.rc('image', cmap='hsv')
-        cols = arr%np.pi
-        norm = plt.Normalize(vmin=0, vmax=np.pi)
-    else:
-        mpl.rc('image', cmap='gist_gray')
-        cols = np.zeros_like(arr)
-        norm = plt.Normalize(vmin=0, vmax=1)
+# def plotdat(arr,pflag,nmax):
+#     """
+#     Arguments:
+# 	  arr (float(nmax,nmax)) = array that contains lattice data;
+# 	  pflag (int) = parameter to control plotting;
+#       nmax (int) = side length of square lattice.
+#     Description:
+#       Function to make a pretty plot of the data array.  Makes use of the
+#       quiver plot style in matplotlib.  Use pflag to control style:
+#         pflag = 0 for no plot (for scripted operation);
+#         pflag = 1 for energy plot;
+#         pflag = 2 for angles plot;
+#         pflag = 3 for black plot.
+# 	  The angles plot uses a cyclic color map representing the range from
+# 	  0 to pi.  The energy plot is normalised to the energy range of the
+# 	  current frame.
+# 	Returns:
+#       NULL
+#     """
+#     if pflag==0:
+#         return
+#     u = np.cos(arr)
+#     v = np.sin(arr)
+#     x = np.arange(nmax)
+#     y = np.arange(nmax)
+#     cols = np.zeros((nmax,nmax))
+#     if pflag==1: # colour the arrows according to energy
+#         mpl.rc('image', cmap='rainbow')
+#         for i in range(nmax):
+#             for j in range(nmax):
+#                 cols[i,j] = one_energy(arr,i,j,nmax)
+#         norm = plt.Normalize(cols.min(), cols.max())
+#     elif pflag==2: # colour the arrows according to angle
+#         mpl.rc('image', cmap='hsv')
+#         cols = arr%np.pi
+#         norm = plt.Normalize(vmin=0, vmax=np.pi)
+#     else:
+#         mpl.rc('image', cmap='gist_gray')
+#         cols = np.zeros_like(arr)
+#         norm = plt.Normalize(vmin=0, vmax=1)
 
-    quiveropts = dict(headlength=0,pivot='middle',headwidth=1,scale=1.1*nmax)
-    fig, ax = plt.subplots()
-    q = ax.quiver(x, y, u, v, cols,norm=norm, **quiveropts)
-    ax.set_aspect('equal')
-    plt.show()
+#     quiveropts = dict(headlength=0,pivot='middle',headwidth=1,scale=1.1*nmax)
+#     fig, ax = plt.subplots()
+#     q = ax.quiver(x, y, u, v, cols,norm=norm, **quiveropts)
+#     ax.set_aspect('equal')
+#     plt.show()
 #=======================================================================
 def savedat(arr,nsteps,Ts,runtime,ratio,energy,order,nmax):
     """
@@ -322,13 +322,13 @@ def main(program, nsteps, nmax, temp, pflag, comm):
         NULL
     """
     rank = comm.Get_rank()
-
+    print(f"{rank} rank")
     # Create and initialise lattice
     lattice = initdat(nmax)
 
     if rank == 0:
         # Plot initial frame of lattice
-        plotdat(lattice,pflag,nmax)
+        #plotdat(lattice,pflag,nmax)
         # Create arrays to store energy, acceptance ratio and order parameter
         energy = np.zeros(nsteps+1,dtype=np.dtype)
         ratio = np.zeros(nsteps+1,dtype=np.dtype)
@@ -337,24 +337,24 @@ def main(program, nsteps, nmax, temp, pflag, comm):
         energy[0] = all_energy(lattice,nmax)
         ratio[0] = 0.5 # ideal value
         order[0] = get_order(lattice,nmax)
+        # Begin doing and timing some MC steps.
+        initial = time.time()
 
-    # Begin doing and timing some MC steps.
-    initial = time.time()
     for it in range(1,nsteps+1):
         accept_ratio = MC_parallel_step(lattice,temp,nmax,comm)
         if rank == 0:
             ratio[it] = accept_ratio
             energy[it] = all_energy(lattice,nmax)
             order[it] = get_order(lattice,nmax)
-    final = time.time()
-    runtime = final-initial
 
     if rank == 0:
+        final = time.time()
+        runtime = final-initial
         # Final outputs
         print("{}: Size: {:d}, Steps: {:d}, T*: {:5.3f}: Order: {:5.3f}, Time: {:8.6f} s".format(program, nmax,nsteps,temp,order[nsteps-1],runtime))
         # Plot final frame of lattice and generate output file
         savedat(lattice,nsteps,temp,runtime,ratio,energy,order,nmax)
-        plotdat(lattice,pflag,nmax)
+        #plotdat(lattice,pflag,nmax)
 
 # def main(program, nsteps, nmax, temp, pflag, comm):
 #     """
