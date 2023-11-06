@@ -1,4 +1,4 @@
-from Vectorized_LebwohlLasher import initdat, one_energy, all_energy, MC_step, get_order, get_order,main
+from MPI_Vec_LL import initdat, one_energy, all_energy, MC_step, get_order, get_order,main
 import numpy as np
 
 def test_initdat():
