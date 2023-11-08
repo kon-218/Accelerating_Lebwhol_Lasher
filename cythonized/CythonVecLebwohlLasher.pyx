@@ -270,7 +270,7 @@ cdef MC_parallel_step(np.ndarray arr,float Ts,int nmax, comm):
                 boltz = exp( -(en1 - en0) / Ts )
 
                 if boltz >= random_uniform():
-                    accept += 1
+                    local_accept += 1
                 else:
                     arr[ix,iy] -= ang
     

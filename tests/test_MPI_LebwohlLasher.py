@@ -1,5 +1,6 @@
-from MPI_LebwohlLasher import initdat, one_energy, all_energy, main
+from MPI_LebwohlLasher import initdat, one_energy, all_energy, MC_parallel_step, main
 import numpy as np
+from mpi4py import MPI
 
 def test_initdat():
     nmax = 5
@@ -25,3 +26,19 @@ def test_all_energy():
 
     # Assert that the calculated energy matches the expected energy
     assert calculated_energy == expected_energy
+
+def test_acceptance_ratio():
+    # Create a dummy lattice
+    nmax = 5
+    arr = np.zeros((nmax, nmax))
+    Ts = 0.5
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    
+    # Call MC_step function
+    if rank ==0:
+        acceptance_ratio = MC_parallel_step(arr, Ts, nmax, comm)
+    
+    # Check if acceptance ratio is between 0 and 1
+    if rank ==0:
+        assert 0 <= acceptance_ratio <= 1

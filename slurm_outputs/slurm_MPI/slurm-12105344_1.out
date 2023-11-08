@@ -1,0 +1,15 @@
+Running tests
+Before activation python =  /usr/bin/python
+Intel(R) Parallel Studio XE 2020 Update 4 for Linux*
+Copyright 2009-2020 Intel Corporation.
+After activation python = /mnt/storage/software/languages/intel/intel-parallel_studio_xe_2020_u4/intelpython3/bin/python
+MPI_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.255, Time: 17.163968 s
+Num Procs: 10
+MPI_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.268, Time: 18.170146 s
+Num Procs: 12
+MPI_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.264, Time: 16.306201 s
+Num Procs: 14
+MPI_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.254, Time: 15.908525 s
+Num Procs: 16
+MPI_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.264, Time: 16.582103 s
+Num Procs: 20

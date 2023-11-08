@@ -171,7 +171,7 @@ def one_energy(arr,ix,iy,nmax):
     return res
 
 #=======================================================================
-@guvectorize([(float64[:,:], int64, float64[:,:])], '(n,m),()->(n,m)', target='parallel')
+@guvectorize([(float64[:,:], int64, float64[:,:])], '(n,m),()->(n,m)', target='cpu')
 def all_energy(arr,nmax, result):
     """
     Arguments:
@@ -183,11 +183,14 @@ def all_energy(arr,nmax, result):
     Returns:
       enall (float) = reduced energy of lattice.
     """
-    #print(arr)
+    result_energy=0.0
+
     for i in range(nmax):
         for j in range(nmax):
-            result_energy = one_energy(arr,i,j,nmax)
-            result[0][0] += result_energy
+            one_energy_val = one_energy(arr,i,j,nmax)
+            result_energy += one_energy_val
+
+    result[0][0]=result_energy
 #=======================================================================
 def get_order(arr,nmax):
     """
@@ -281,8 +284,11 @@ def MC_parallel_step(arr,Ts,nmax,comm):
     local_nmax = nmax // size
 
     # Determine which rows of the lattice each process will work on
-    start_row = rank * local_nmax
-    end_row = (rank + 1) * local_nmax if rank != size - 1 else nmax
+    start_row = rank * local_nmax 
+    if rank != size - 1:
+        end_row = (rank + 1) * local_nmax
+    else:
+        end_row = nmax
 
     local_accept = 0
 
@@ -326,6 +332,7 @@ def main(program, nsteps, nmax, temp, pflag, comm):
     Returns:
         NULL
     """
+    np.random.seed(42)
     rank = comm.Get_rank()
     print(f"{rank} rank")
     # Create and initialise lattice
@@ -348,7 +355,7 @@ def main(program, nsteps, nmax, temp, pflag, comm):
         initial = time.time()
 
     for it in range(1,nsteps+1):
-        accept_ratio = MC_step(lattice,temp,nmax)
+        accept_ratio = MC_parallel_step(lattice,temp,nmax,comm)
         if rank == 0:
             ratio[it] = accept_ratio
             all_energy(lattice,nmax,result_view)

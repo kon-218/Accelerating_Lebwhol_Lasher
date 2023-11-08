@@ -1,0 +1,9 @@
+Running tests
+Before activation python =  /usr/bin/python
+Intel(R) Parallel Studio XE 2020 Update 4 for Linux*
+Copyright 2009-2020 Intel Corporation.
+After activation python = /mnt/storage/software/languages/intel/intel-parallel_studio_xe_2020_u4/intelpython3/bin/python
+MPI_LebwohlLasher.py: Size: 900, Steps: 50, T*: 0.500: Order: 0.256, Time: 2945.050039 s
+Num Procs: 1
+slurmstepd: error: *** STEP 12105383.1 ON compute520 CANCELLED AT 2023-11-08T02:57:08 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 12105383 ON compute520 CANCELLED AT 2023-11-08T02:57:08 DUE TO TIME LIMIT ***

@@ -22,8 +22,7 @@ domains alternate between old data and new data.
 SH 16-Oct-23
 """
 
-import sys
-import time 
+import sys 
 from mpi4py import MPI
 
 #import Cython.CythonLebwohlLasher as cythonLL
@@ -39,6 +38,7 @@ if int(len(sys.argv)) == 5:
     SIZE = int(sys.argv[2])
     TEMPERATURE = float(sys.argv[3])
     PLOTFLAG = int(sys.argv[4])
+
     if rank == 0:
         initial = MPI.Wtime()
         print(initial)
@@ -50,5 +50,6 @@ if int(len(sys.argv)) == 5:
         time_taken = final - initial
         print(f"Time taken: {time_taken:.5f}s")
 else:
-    print("Usage: mpiexec -n <num_processes> python {} <ITERATIONS> <SIZE> <TEMPERATURE> <PLOTFLAG>".format(sys.argv[0]))
+    if rank == 0:
+        print("Usage: mpiexec -n <num_processes> python {} <ITERATIONS> <SIZE> <TEMPERATURE> <PLOTFLAG>".format(sys.argv[0]))
     #=======================================================================

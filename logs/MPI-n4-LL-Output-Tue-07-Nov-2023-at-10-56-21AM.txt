@@ -1,0 +1,12 @@
+#=====================================================
+# MPI Monte Carlo
+# Num Procs:           4
+# File created:        Tue-07-Nov-2023-at-10-56-21AM
+# Size of lattice:     50x50
+# Number of MC steps:  50
+# Reduced temperature: 0.500
+# Run time (s):        3.928818
+#=====================================================
+# MPI MC step:  Ratio:     Energy:   Order:
+#=====================================================
+   00000    0.500000   -2566.2733  0.2711 
