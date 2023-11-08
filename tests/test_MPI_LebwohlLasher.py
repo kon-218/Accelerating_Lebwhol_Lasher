@@ -1,4 +1,4 @@
-from MPI_LebwohlLasher import initdat, one_energy, all_energy, MC_parallel_step, main
+from LL_MPI import initdat, one_energy, all_energy, MC_parallel_step, main
 import numpy as np
 from mpi4py import MPI
 
