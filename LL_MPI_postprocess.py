@@ -7,9 +7,10 @@ data_dict= {}
 data_dict_vec_jit = {}
 data_dict_vec = {}
 data_dict_OG = {}
+data_dict_vec_2 = {}
 # Initialize empty lists to store size and time data
-sizes,sizes_vec,sizes_vec_jit, sizes_OG= [],[],[],[]
-times,times_vec,times_vec_jit,times_OG = [],[],[],[]
+sizes,sizes_vec,sizes_vec_jit, sizes_OG, sizes_vec_2= [],[],[],[],[]
+times,times_vec,times_vec_jit,times_OG,times_vec_2 = [],[],[],[],[]
 n_processes_list,n_processes_vec,n_processes_vec_jit = [],[],[]
 
 # Define the folder path where your slurm files are located
@@ -83,8 +84,7 @@ for size, time,procs in zip(sizes, times,n_processes_list):
     plt.ylabel('Time')
 
 ax.scatter(sizes_OG, times_OG, s=10,c="black")
-ax.plot(sizes_OG,times_OG,c="black",linewidth=0.5)
-coefficients = np.polyfit(sizes, times, degree)
+coefficients = np.polyfit(sizes_OG, times_OG, 2)
 polynomial = np.poly1d(coefficients)
 
 # Generate x values for the fitted curve
@@ -94,14 +94,14 @@ x_values = np.linspace(min(sizes), max(sizes), 100)
 y_values = polynomial(x_values)
 
 # Plot the fitted curve
-ax.plot(x_values, y_values, color='black')
+ax.plot(x_values, y_values, color='black', linewidth=0.7)
 
 # Add colorbar
 sm.set_array([])  # You can set an empty array or use your procs list
 cbar = plt.colorbar(sm,ax=ax)
 cbar.set_label('Number of Processes')
 plt.title("MPI")
-plt.saveafig(f'figs/LL_MPI.png')
+plt.savefig(f'figs/LL_MPI.png')
 
 folder_path = '/home/user/Documents/Fourth_year/SciComp/miniProject1/Accelerating_Lebwhol_Lasher/slurm_outputs/slurm_MPI_Numba'
 # Iterate through all files in the folder
@@ -169,6 +169,30 @@ ax.set_ylabel('Time')
 ax.set_title(f'Time vs Size LebwohlLasher')
 plt.savefig(f'figs/LL_OG.png')
 
+folder_path = '/home/user/Documents/Fourth_year/SciComp/miniProject1/Accelerating_Lebwhol_Lasher/slurm_outputs/slurm_Vec'
+
+data_dict = {}
+# Initialize empty lists to store size and time data
+sizes = []
+times = []
+
+# Iterate through all files in the folder
+for filename in os.listdir(folder_path):
+    if filename.endswith(".out"):  # Assuming your slurm files have a ".out" extension
+        with open(os.path.join(folder_path, filename), 'r') as file:
+            lines = file.readlines()[3:]  # Skip the first three lines
+
+            for line in lines:
+                if "Vec_LL.py: Size:" in line:
+                    parts = line.split()
+                    #print(parts)
+                    size = int(parts[2].strip(","))
+                    time = float(parts[-2].strip())  # Extract time from the line
+                    print(f"Size: {size}, Time: {time}")
+                    sizes_vec_2.append(size)
+                    times_vec_2.append(time)
+
+
 fig,ax = plt.subplots(1,1)
 for size, time, procs in zip(sizes_vec, times_vec,n_processes_vec):
     print(f"Size: {size}, Time: {time}, Procs: {procs}")
@@ -177,6 +201,19 @@ for size, time, procs in zip(sizes_vec, times_vec,n_processes_vec):
     ax.scatter(size,time,c=color,label=procs,s=8)
     plt.xlabel('Size')
     plt.ylabel('Time')
+
+ax.scatter(sizes_vec_2, times_vec_2, s=10,c="black")
+coefficients = np.polyfit(sizes_vec_2, times_vec_2, 2)
+polynomial = np.poly1d(coefficients)
+
+# Generate x values for the fitted curve
+x_values = np.linspace(min(sizes_vec_2), max(sizes_vec_2), 100)
+
+# Calculate corresponding y values
+y_values = polynomial(x_values)
+
+# Plot the fitted curve
+ax.plot(x_values, y_values, color='black', linewidth=0.7)
 
 # Add colorbar
 sm.set_array([])  # You can set an empty array or use your procs list

@@ -1,0 +1,378 @@
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.283, Time: 14.335947 s
+Time taken: 14.33953s
+Num Procs: 1
+
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.309, Time: 15.510874 s
+Time taken: 15.51295s
+Num Procs: 2
+1
+0.0
+ 
+0
+ 
+2
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.323, Time: 15.978042 s
+Time taken: 15.98180s
+Num Procs: 3 
+3
+0.0
+ 
+0
+ 
+2
+ 
+1
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.306, Time: 15.635078 s
+Time taken: 15.63661s
+Num Procs: 4
+ 
+1
+ 
+4
+ 
+3
+ 
+2
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.286, Time: 16.911598 s
+Time taken: 16.91416s
+Num Procs: 5
+2
+ 
+5
+ 
+3
+0.0
+ 
+0
+ 
+1
+ 
+4
+MPI_Cython_LL.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.286, Time: 16.911598 s
+Time taken: 15.91416s
+Num Procs: 6
+
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.263, Time: 57.543282 s
+Time taken: 57.54712s
+Num Procs: 1
+0.0
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.272, Time: 58.859600 s
+Time taken: 58.86589s
+Num Procs: 2 
+2
+0.0
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.305, Time: 55.558422 s
+Time taken: 55.56729s
+Num Procs: 3
+ 
+0
+ 
+1
+ 
+3
+ 
+2
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.273, Time: 63.588974 s
+Time taken: 63.59372s
+Num Procs: 4 
+2
+0.0
+ 
+3
+ 
+0
+ 
+1
+ 
+4
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.279, Time: 70.322227 s
+Time taken: 70.32673s
+Num Procs: 5 
+1
+ 
+5
+ 
+2
+ 
+3
+ 
+4
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.271, Time: 69.385094 s
+Time taken: 69.38763s
+Num Procs: 6
+ 
+0
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.280, Time: 120.081802 s
+Time taken: 120.09594s
+Num Procs: 1
+0.0
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.252, Time: 116.600060 s
+Time taken: 116.61211s
+Num Procs: 2 
+1
+0.0
+ 
+0
+ 
+2
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.277, Time: 118.081062 s
+Time taken: 118.08443s
+Num Procs: 3
+ 
+0
+ 
+3
+ 
+2
+ 
+1
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.258, Time: 113.427986 s
+Time taken: 113.43322s
+Num Procs: 4 
+1
+ 
+4
+ 
+3
+ 
+2
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.260, Time: 108.425385 s
+Time taken: 108.43208s
+Num Procs: 5
+ 
+0
+ 
+1
+ 
+3
+ 
+5
+ 
+2
+ 
+4
+MPI_Cython_LL.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.260, Time: 109.901390 s
+Time taken: 109.91110s
+Num Procs: 6
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.274, Time: 149.378082 s
+Time taken: 149.38626s
+Num Procs: 1
+0.0
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.267, Time: 160.648529 s
+Time taken: 160.65190s
+Num Procs: 2
+2
+ 
+1
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.267, Time: 137.841888 s
+Time taken: 137.85375s
+Num Procs: 3 
+3
+0.0
+ 
+0
+ 
+1
+ 
+2
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.256, Time: 148.726562 s
+Time taken: 148.73437s
+Num Procs: 4
+2
+ 
+3
+0.0
+ 
+0
+ 
+1
+ 
+4
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.273, Time: 154.692459 s
+Time taken: 154.69720s
+Num Procs: 5 
+1
+ 
+5
+ 
+4
+ 
+3
+ 
+2
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.254, Time: 159.116547 s
+Time taken: 159.12522s
+Num Procs: 6
+ 
+0
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.260, Time: 196.569397 s
+Time taken: 196.59067s
+Num Procs: 1
+ 
+1
+ 
+0
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.263, Time: 214.761353 s
+Time taken: 214.78213s
+Num Procs: 2
+ 
+2
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.265, Time: 222.694839 s
+Time taken: 222.70217s
+Num Procs: 3 
+1
+ 
+3
+0.0
+ 
+0
+ 
+2
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.257, Time: 252.425034 s
+Time taken: 252.43769s
+Num Procs: 4 
+3
+ 
+2
+ 
+1
+0.0
+ 
+4
+ 
+0
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.252, Time: 247.432541 s
+Time taken: 247.44151s
+Num Procs: 5
+ 
+1
+ 
+0
+ 
+2
+ 
+3
+ 
+5
+ 
+4
+MPI_Cython_LL.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.257, Time: 257.143219 s
+Time taken: 257.16206s
+Num Procs: 6
+ 
+0
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.263, Time: 285.962463 s
+Time taken: 285.98385s
+Num Procs: 1
+ 
+0
+ 
+1
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.252, Time: 309.796722 s
+Time taken: 309.80591s
+Num Procs: 2
+ 
+0
+ 
+2
+ 
+1
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.257, Time: 324.882660 s
+Time taken: 324.90230s
+Num Procs: 3
+ 
+0
+ 
+2
+ 
+1
+ 
+3
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.257, Time: 165.140762 s
+Time taken: 165.16472s
+Num Procs: 4 
+4
+ 
+2
+ 
+3
+ 
+1
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.268, Time: 139.912949 s
+Time taken: 139.91841s
+Num Procs: 5 
+1
+ 
+5
+ 
+2
+0.0
+ 
+0
+ 
+3
+ 
+4
+MPI_Cython_LL.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.252, Time: 147.983917 s
+Time taken: 147.98929s
+Num Procs: 6
+ 
+0
+MPI_Cython_LL.py: Size: 700, Steps: 50, T*: 0.500: Order: 0.255, Time: 192.856445 s
+Time taken: 192.86331s
+Num Procs: 1 
+1
+0.0
+ 
+0
+MPI_Cython_LL.py: Size: 700, Steps: 50, T*: 0.500: Order: 0.255, Time: 194.308136 s
+Time taken: 194.31684s
+Num Procs: 2 
+2
+ 
+1
+0.0
+ 
+0
+0.0

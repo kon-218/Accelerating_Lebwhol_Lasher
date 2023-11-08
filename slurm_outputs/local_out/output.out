@@ -1,0 +1,20 @@
+Cython_LebwohlLasher.py: Size: 100, Steps: 50, T*: 0.500: Order: 0.340, Time: 0.000000 s
+Time taken: 3.67736s
+Cython_LebwohlLasher.py: Size: 200, Steps: 50, T*: 0.500: Order: 0.286, Time: 128.000000 s
+Time taken: 15.14497s
+Cython_LebwohlLasher.py: Size: 300, Steps: 50, T*: 0.500: Order: 0.272, Time: 0.000000 s
+Time taken: 33.89774s
+Cython_LebwohlLasher.py: Size: 400, Steps: 50, T*: 0.500: Order: 0.267, Time: 0.000000 s
+Time taken: 60.23067s
+Cython_LebwohlLasher.py: Size: 500, Steps: 50, T*: 0.500: Order: 0.260, Time: 128.000000 s
+Time taken: 95.25409s
+Cython_LebwohlLasher.py: Size: 600, Steps: 50, T*: 0.500: Order: 0.269, Time: 128.000000 s
+Time taken: 137.95452s
+Cython_LebwohlLasher.py: Size: 700, Steps: 50, T*: 0.500: Order: 0.256, Time: 256.000000 s
+Time taken: 189.90780s
+Cython_LebwohlLasher.py: Size: 800, Steps: 50, T*: 0.500: Order: 0.252, Time: 256.000000 s
+Time taken: 245.57178s
+Cython_LebwohlLasher.py: Size: 900, Steps: 50, T*: 0.500: Order: 0.253, Time: 384.000000 s
+Time taken: 386.27653s
+Cython_LebwohlLasher.py: Size: 1000, Steps: 50, T*: 0.500: Order: 0.257, Time: 1024.000000 s
+Time taken: 1082.95729s

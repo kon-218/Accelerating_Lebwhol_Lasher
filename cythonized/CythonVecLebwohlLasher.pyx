@@ -304,8 +304,8 @@ cpdef main(str program, int nsteps, int nmax, float temp, int pflag,comm):
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
 
-    print("Comm complete")
-    print(rank)
+    #print("Comm complete")
+    #print(rank)
     cdef np.ndarray result_view, energy, ratio, order
     cdef int it
     cdef float runtime

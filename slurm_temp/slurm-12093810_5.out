@@ -1,6 +1,0 @@
-Running tests
-Before activation python =  /mnt/storage/software/languages/miniconda/miniconda3.11.3-CompressAI-Vision0.1.3/bin/python
-After activation python = /user/home/ib20120/.conda/envs/LL_env/bin/python
-size: '=': No such file
-size: '125': No such file
-Usage: python Vectorized_LebwohlLasher.py <ITERATIONS> <SIZE> <TEMPERATURE> <PLOTFLAG>

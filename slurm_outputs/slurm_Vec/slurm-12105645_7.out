@@ -1,0 +1,5 @@
+Running tests
+Before activation python =  /mnt/storage/software/languages/miniconda/miniconda3.11.3-CompressAI-Vision0.1.3/bin/python
+After activation python = /user/home/ib20120/.conda/envs/LL_env/bin/python
+after setup
+Vec_LL.py: Size: 700, Steps: 50, T*: 0.500: Order: 0.254, Time: 318.007831 s

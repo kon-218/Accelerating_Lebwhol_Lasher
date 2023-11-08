@@ -41,7 +41,7 @@ if int(len(sys.argv)) == 5:
 
     if rank == 0:
         initial = MPI.Wtime()
-        print(initial)
+        #print(initial)
 
     main(PROGNAME,ITERATIONS,SIZE,TEMPERATURE,PLOTFLAG,comm)
     
@@ -49,6 +49,7 @@ if int(len(sys.argv)) == 5:
         final = MPI.Wtime()
         time_taken = final - initial
         print(f"Time taken: {time_taken:.5f}s")
+        print("Num Procs",comm.Get_size())
 else:
     if rank == 0:
         print("Usage: mpiexec -n <num_processes> python {} <ITERATIONS> <SIZE> <TEMPERATURE> <PLOTFLAG>".format(sys.argv[0]))

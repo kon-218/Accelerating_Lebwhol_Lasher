@@ -1,7 +1,20 @@
 import os
 import matplotlib.pyplot as plt
+import numpy as np
+
+
+data_dict= {}
+data_dict_vec_jit = {}
+data_dict_vec = {}
+data_dict_OG = {}
+data_dict_vec_2 = {}
+# Initialize empty lists to store size and time data
+sizes,sizes_vec, sizes_OG, sizes_vec_2= [],[],[],[]
+times,times_vec,times_OG,times_vec_2 = [],[],[],[]
+n_processes_list,n_processes_vec = [],[]
 
 # Define the folder path where your slurm files are located
+
 folder_path = '/home/user/Documents/Fourth_year/SciComp/miniProject1/Accelerating_Lebwhol_Lasher/slurm_outputs/slurm_LL'
 
 data_dict = {}
@@ -22,18 +35,97 @@ for filename in os.listdir(folder_path):
                     size = int(parts[2].strip(","))
                     time = float(parts[-2].strip())  # Extract time from the line
                     print(f"Size: {size}, Time: {time}")
-                    sizes.append(size)
-                    times.append(time)
+                    sizes_OG.append(size)
+                    times_OG.append(time)
+
+# Define the folder path where your slurm files are located
+folder_path = '/home/user/Documents/Fourth_year/SciComp/miniProject1/Accelerating_Lebwhol_Lasher/slurm_outputs/local_out'
+
+# Iterate through all files in the folder
+for filename in os.listdir(folder_path):
+    if filename.endswith(".out"):  # Assuming your slurm files have a ".out" extension
+        with open(os.path.join(folder_path, filename), 'r') as file:
+            lines = file.readlines()[3:]  # Skip the first three lines
+
+            for line in lines:
+                if "LebwohlLasher.py: Size:" in line:
+                    parts = line.split()
+                    #print(parts)
+                    size = int(parts[2].strip(","))
+                    time = float(parts[-2].strip())  # Extract time from the line
+                    print(f"Size: {size}, Time: {time}")
+                    sizes_vec.append(size)
+                    times_vec.append(time)
+# # Print extracted data for verification
+# cmap = plt.get_cmap('gnuplot')
+# norm = plt.Normalize(min(n_processes_list), max(n_processes_list))
+# sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+fig,ax = plt.subplots(1,1)
+
+ax.plot(sizes_vec, times_vec,c="black",linewidth=1.2, label="Cythonized Vectorized")
+ax.scatter(sizes_vec, times_vec,c="black", s=0.8)
+ax.scatter(sizes_OG,times_OG, c="black",s=0.8)
+coefficients = np.polyfit(sizes_OG, times_OG, 2)
+polynomial = np.poly1d(coefficients)
+
+# Generate x values for the fitted curve
+x_values = np.linspace(min(sizes_OG), max(sizes_OG), 100)
+
+# Calculate corresponding y values
+y_values = polynomial(x_values)
+
+# Plot the fitted curve
+ax.plot(x_values, y_values, color='black', linewidth=0.7,label="Original LL")
+
+# Define the folder path where your slurm files are located
+folder_path = '/home/user/Documents/Fourth_year/SciComp/miniProject1/Accelerating_Lebwhol_Lasher/slurm_outputs/local_out'
+
+# Iterate through all files in the folder
+for filename in os.listdir(folder_path):
+    if filename.endswith(".out"):  # Assuming your slurm files have a ".out" extension
+        with open(os.path.join(folder_path, filename), 'r') as file:
+            lines = file.readlines()[3:]  # Skip the first three lines
+
+            for line in lines:
+                print(line)
+                if "MPI_Cython_LL.py: Size:" in line:
+                    parts = line.split()
+                    print(parts)
+                    size = int(parts[2].strip(","))
+                    time = float(parts[-2].strip())  # Extract time from the line
+                    print(f"Size: {size}, Time: {time}")
+                    sizes_vec_2.append(size)
+                    times_vec_2.append(time)
+                elif "Num Procs:" in line:
+                    n_processes = int(line.split(':')[1].strip())  # Extract number of processors from the line
+                    n_processes_list.append(n_processes)
+            
+            if n_processes is not None and size is not None and time is not None:
+                if n_processes not in data_dict:
+                    data_dict[n_processes] = {'sizes': [], 'times': []}
+                data_dict[n_processes]['sizes'].append(size)
+                data_dict[n_processes]['times'].append(time)
+print("sadafgasdgdssa",data_dict)
+
 
 # Print extracted data for verification
-for size, time in zip(sizes, times):
-    print(f"Size: {size}, Time: {time}")
+cmap = plt.get_cmap('gnuplot')
+norm = plt.Normalize(min(n_processes_list), max(n_processes_list))
+sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+print(sizes,times,n_processes_list)
+for size, time,procs in zip(sizes_vec_2, times_vec_2,n_processes_list):
 
-plt.figure()
-# for n_processes, data in data_dict.items():
-#     if n_processes%4==0:
-plt.scatter(sizes, times)
-plt.xlabel('Size')
-plt.ylabel('Time')
-plt.title(f'Time vs Size LebwohlLasher')
-plt.savefig(f'figs/LL_OG.png')
+    print(f"Size: {size}, Time: {time}, Procs: {procs} AAAAAAAAAAAAA")
+    #if procs == 10:
+    color = cmap(norm(procs))
+    ax.scatter(size,time,c=color,label=procs,s=8)
+    plt.xlabel('Size')
+    plt.ylabel('Time')
+
+# Add colorbar
+sm.set_array([])  # You can set an empty array or use your procs list
+cbar = plt.colorbar(sm,ax=ax)
+cbar.set_label('Number of Processes')
+plt.legend(["Cythonized Vectorized","Original"])
+plt.title("Cython")
+plt.savefig(f'figs/LL_Cython_OG.png')
