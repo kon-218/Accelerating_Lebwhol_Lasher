@@ -1,4 +1,4 @@
-from LebwohlLasher import initdat, one_energy, all_energy, main
+from LL import initdat, one_energy, all_energy, main
 import numpy as np
 
 def test_initdat():
